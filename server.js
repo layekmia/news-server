@@ -7,6 +7,7 @@ const authRoutes = require("./routes/authRoutes");
 const userRouter = require("./routes/userRoutes");
 const articleRoute = require("./routes/articleRoutes");
 const subscriptionRoute = require("./routes/subscriptionRoute");
+const adminRouter = require("./routes/adminRoutes");
 
 const app = express();
 
@@ -23,6 +24,7 @@ app.use("/web/api/", authRoutes);
 app.use("/web/api/", userRouter);
 app.use("/web/api/", articleRoute);
 app.use("/web/api/", subscriptionRoute);
+app.use("/web/api/", adminRouter);
 
 // connect mongodb ;
 connectDB();

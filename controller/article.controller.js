@@ -58,11 +58,61 @@ exports.getArticleById = async (req, res) => {
 exports.getPremiumArticles = async (req, res) => {
   try {
     const articles = await Article.find({ isPremium: true });
-    console.log(articles)
+    console.log(articles);
 
     res.status(201).json(articles);
   } catch (error) {
-    console.log(error)
+    console.log(error);
     res.status(500).json({ message: "internal server error" });
   }
 };
+
+exports.getUserArticles = async (req, res) => {
+  const email = req.query.email;
+
+  try {
+    const articles = await Article.find({ authorEmail: email });
+    res.status(201).json(articles);
+  } catch (error) {
+    res.status(500).json({ message: "Internal server error" });
+  }
+};
+
+exports.updateArticle = async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    const updateData = req.body;
+
+    const updated = await Article.findByIdAndUpdate(id, updateData, {
+      new: true,
+    });
+
+    if (!updated) return res.status(404).json({ message: "Article not found" });
+
+    res.status(201).json({ message: "updated successfully", article: updated });
+  } catch (error) {
+    console.error("Error updating article:", error);
+    res.status(500).json({ message: "Server error" });
+  }
+};
+
+exports.deleteArticle = async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    const deleted = await Article.findByIdAndDelete(id);
+
+    if (!deleted) {
+      return res
+        .status(404)
+        .json({ success: false, message: "Article not found" });
+    }
+
+    res.json({ success: true, message: "Article deleted successfully" });
+  } catch (error) {
+    console.error("Error deleting article:", error);
+    res.status(500).json({ success: false, message: "Server error" });
+  }
+};
+
