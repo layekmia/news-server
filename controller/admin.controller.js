@@ -3,6 +3,10 @@ const User = require("../model/userSchema");
 const Publisher = require("../model/publisherSchema");
 
 exports.getAllArticles = async (req, res) => {
+  if (req.user.role !== "admin") {
+    return res.status(404).json({ message: "Forbidden: Access denied" });
+  }
+
   try {
     const page = parseInt(req.query.page) || 1;
     const limit = parseInt(req.query.limit) || 10;
@@ -27,8 +31,10 @@ exports.getAllArticles = async (req, res) => {
 };
 
 exports.approveArticle = async (req, res) => {
+  if (req.user.role !== "admin") {
+    return res.status(404).json({ message: "Forbidden: Access denied" });
+  }
   const id = req.params.id;
-
   try {
     const article = await Article.findByIdAndUpdate(
       id,
@@ -45,6 +51,10 @@ exports.approveArticle = async (req, res) => {
 };
 
 exports.declineArticle = async (req, res) => {
+  if (req.user.role !== "admin") {
+    return res.status(404).json({ message: "Forbidden: Access denied" });
+  }
+
   try {
     const { reason } = req.body;
 
@@ -63,8 +73,11 @@ exports.declineArticle = async (req, res) => {
 };
 
 exports.deleteArticle = async (req, res) => {
-  const id = req.params.id;
+  if (req.user.role !== "admin") {
+    return res.status(404).json({ message: "Forbidden: Access denied" });
+  }
 
+  const id = req.params.id;
   try {
     const article = await Article.findByIdAndDelete(id);
 
@@ -77,8 +90,11 @@ exports.deleteArticle = async (req, res) => {
 };
 
 exports.makeArticlePremium = async (req, res) => {
-  const id = req.params.id;
+  if (req.user.role !== "admin") {
+    return res.status(404).json({ message: "Forbidden: Access denied" });
+  }
 
+  const id = req.params.id;
   try {
     const article = await Article.findByIdAndUpdate(
       id,
@@ -95,6 +111,10 @@ exports.makeArticlePremium = async (req, res) => {
 };
 
 exports.getAllUsers = async (req, res) => {
+  if (req.user.role !== "admin") {
+    return res.status(404).json({ message: "Forbidden: Access denied" });
+  }
+
   try {
     const page = parseInt(req.query.page) || 1;
     const limit = parseInt(req.query.limit) || 10;
@@ -119,8 +139,11 @@ exports.getAllUsers = async (req, res) => {
 };
 
 exports.promoteToAdmin = async (req, res) => {
-  const userId = req.params.id;
+  if (req.user.role !== "admin") {
+    return res.status(404).json({ message: "Forbidden: Access denied" });
+  }
 
+  const userId = req.params.id;
   try {
     const updatedUser = await User.findByIdAndUpdate(
       userId,
@@ -139,6 +162,10 @@ exports.promoteToAdmin = async (req, res) => {
 };
 
 exports.addPublisher = async (req, res) => {
+  if (req.user.role !== "admin") {
+    return res.status(404).json({ message: "Forbidden: Access denied" });
+  }
+
   const { name, logo, author } = req.body;
   try {
     const newPublisher = new Publisher({ name, logo, author });
@@ -151,6 +178,10 @@ exports.addPublisher = async (req, res) => {
 };
 
 exports.calculateArticleDistribution = async (req, res) => {
+  if (req.user.role !== "admin") {
+    return res.status(404).json({ message: "Forbidden: Access denied" });
+  }
+
   try {
     const result = await Article.aggregate([
       {

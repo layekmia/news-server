@@ -13,13 +13,13 @@ const verifyJWT = require("../middleware/verifyJWT");
 
 const router = express.Router();
 
-router.post("/articles", createArticle);
+router.post("/articles", verifyJWT, createArticle);
 router.get("/articles/approved", getAllApprovedArticles);
-router.get("/user/premium/articles", getPremiumArticles);
-router.get("/articles/:id", getArticleById);
-router.get("/user/articles", getUserArticles);
-router.put("/update/article/:id", updateArticle);
-router.delete("/article/delete/:id", deleteArticle);
+router.get("/user/premium/articles", verifyJWT, getPremiumArticles);
+router.get("/articles/:id", verifyJWT, getArticleById);
+router.get("/user/articles", verifyJWT, getUserArticles);
+router.put("/update/article/:id", verifyJWT, updateArticle);
+router.delete("/article/delete/:id", verifyJWT, deleteArticle);
 router.get("/top-articles", getTopViewedArticles);
 
 module.exports = router;

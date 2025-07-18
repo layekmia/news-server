@@ -7,7 +7,7 @@ const verifyJWT = require("../middleware/verifyJWT");
 
 const router = express.Router();
 
-router.post("/users/subscription", createPaymentIntent);
+router.post("/users/subscription", verifyJWT, createPaymentIntent);
 router.patch("/users/premium/", verifyJWT, makeUserPremium);
 
 module.exports = router;
