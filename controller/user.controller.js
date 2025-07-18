@@ -67,7 +67,6 @@ exports.checkUserExists = async (req, res) => {
 // get single user data
 exports.getUserByUID = async (req, res) => {
   const { uid } = req.user;
-
   try {
     const user = await User.findOne({ uid });
 

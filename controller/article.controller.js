@@ -1,9 +1,48 @@
 const Article = require("../model/articleSchema");
+const User = require("../model/userSchema");
 
 exports.createArticle = async (req, res) => {
+  const {
+    title,
+    image,
+    publisher,
+    tags,
+    description,
+    authorEmail,
+    authorName,
+    authorImage,
+    status,
+    isPremium,
+    views,
+  } = req.body;
+
   try {
-    const articleData = req.body;
-    const newArticle = new Article(articleData);
+    const user = await User.findOne({ email: authorEmail });
+    if (!user) return res.status(404).json({ message: "user not found" });
+
+    if (user.role !== "premium" && user.role !== "admin") {
+      const existingArticle = await Article.findOne({ authorEmail });
+
+      if (existingArticle)
+        return res.status(404).json({
+          message:
+            "Free users can only post one article. Upgrade to premium to add more",
+        });
+    }
+
+    const newArticle = new Article({
+      title,
+      image,
+      publisher,
+      tags,
+      description,
+      authorEmail,
+      authorName,
+      authorImage,
+      status,
+      isPremium,
+      views,
+    });
 
     await newArticle.save();
     res
@@ -58,8 +97,6 @@ exports.getArticleById = async (req, res) => {
 exports.getPremiumArticles = async (req, res) => {
   try {
     const articles = await Article.find({ isPremium: true });
-    console.log(articles);
-
     res.status(201).json(articles);
   } catch (error) {
     console.log(error);
@@ -116,3 +153,15 @@ exports.deleteArticle = async (req, res) => {
   }
 };
 
+exports.getTopViewedArticles = async (req, res) => {
+  try {
+    const topArticles = await Article.find({ status: "Approved" })
+      .sort({ views: -1 })
+      .limit(5);
+
+    res.status(201).json(topArticles);
+  } catch (error) {
+    console.error("Error fetching top viewed articles:", error);
+    res.status(500).json({ message: "Server error" });
+  }
+};

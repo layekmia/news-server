@@ -26,6 +26,7 @@ exports.createPaymentIntent = async (req, res) => {
 exports.makeUserPremium = async (req, res) => {
   try {
     const { uid } = req.user;
+    
     const { duration, unit } = req.body;
 
     if (!duration || !unit) {

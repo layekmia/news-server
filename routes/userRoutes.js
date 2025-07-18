@@ -1,10 +1,12 @@
 const express = require("express");
+
 const {
   register,
   checkUserExists,
   getUserByUID,
   updateLastLogin,
 } = require("../controller/user.controller");
+
 const verifyJWT = require("../middleware/verifyJWT");
 const checkSubscriptionExpire = require("../middleware/checkSubscription");
 

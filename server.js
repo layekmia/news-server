@@ -3,11 +3,15 @@ const cors = require("cors");
 require("dotenv").config();
 
 const connectDB = require("./config/db");
+
 const authRoutes = require("./routes/authRoutes");
+
 const userRouter = require("./routes/userRoutes");
+
 const articleRoute = require("./routes/articleRoutes");
 const subscriptionRoute = require("./routes/subscriptionRoute");
 const adminRouter = require("./routes/adminRoutes");
+const publisherRouter = require("./routes/publisherRoute");
 
 const app = express();
 
@@ -25,6 +29,7 @@ app.use("/web/api/", userRouter);
 app.use("/web/api/", articleRoute);
 app.use("/web/api/", subscriptionRoute);
 app.use("/web/api/", adminRouter);
+app.use("/web/api/", publisherRouter);
 
 // connect mongodb ;
 connectDB();

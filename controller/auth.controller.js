@@ -15,10 +15,13 @@ exports.verifyFirebaseToken = async (req, res) => {
 
   try {
     const decoded = await admin.auth().verifyIdToken(firebaseToken);
+
+
     const user = await User.findOne({ email: decoded.email });
 
     if (!user) return res.status(401).json({ message: "user not found" });
 
+    
     const payload = {
       uid: decoded.uid,
       email: decoded.email,
