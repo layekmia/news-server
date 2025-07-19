@@ -37,4 +37,4 @@ exports.verifyFirebaseToken = async (req, res) => {
     console.error("JWT Error:", error);
     res.status(401).json({ error: "Invalid Firebase token" });
   }
-};
+};  
